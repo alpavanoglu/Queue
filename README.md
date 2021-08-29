@@ -1,2 +1,3 @@
 # Queue
-Queue Data Structure with Value Semantics
+
+A description of this package.
