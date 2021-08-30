@@ -3,6 +3,13 @@ import XCTest
 
 final class LinkedListTests: XCTestCase {
     
+    // MARK: - `init:arrayLiteral`
+    func testInitArrayLiteralWithMultipleElementsConstructsLinkedList() {
+        var linkedList: LinkedList = [1, 3, 4, 5]
+        XCTAssertEqual(linkedList.tail!.value, 1)
+        XCTAssertEqual(linkedList.head!.value, 5)
+    }
+    
     // MARK: - `isEmpty`
     func testIsEmptyReturnsTrueWhenHeadIsNil() {
         let linkedList = LinkedList<String>()
@@ -11,14 +18,15 @@ final class LinkedListTests: XCTestCase {
     
     func testIsEmptyReturnsFalseWhenHeadIsNotNil() {
         var linkedList = LinkedList<String>()
-        linkedList.append(value: "node")
+        linkedList.append("node")
         XCTAssertFalse(linkedList.isEmpty)
     }
     
-    func testAppendUpdatesHeadValue() {
+    // MARK: - `append:value`
+    func testAppendUpdatesHeadElement() {
         var linkedList = LinkedList<String>()
         
-        linkedList.append(value: "next")
+        linkedList.append("next")
         
         XCTAssertEqual(linkedList.head?.value, "next")
     }
@@ -27,20 +35,35 @@ final class LinkedListTests: XCTestCase {
         var linkedList = LinkedList<String>()
         let head = linkedList.head
         
-        linkedList.append(value: "next")
+        linkedList.append("next")
         
         XCTAssertNotEqual(head, linkedList.head)
     }
     
-    func testTailsIsFirstAppendedNodeAfterTwoAppends() {
+    func testTailIsFirstAppendedNodeAfter3Appends() {
         var linkedList = LinkedList<String>()
 
-        linkedList.append(value: "tail")
-        linkedList.append(value: "mid")
-        linkedList.append(value: "head")
+        linkedList.append("tail")
+        linkedList.append("mid")
+        linkedList.append("head")
 
         XCTAssertEqual(linkedList.tail?.value, "tail")
         XCTAssertEqual(linkedList.head?.value, "head")
     }
+    
+    func testTailAndHeadAreTheSameWhenOnlyOneNode() {
+        var linkedList = LinkedList<String>()
+        
+        linkedList.append("one")
+        
+        XCTAssertEqual(linkedList.tail, linkedList.head)
+    }
+    
+//    func testAsd() {
+//        let linkedList = LinkedList<String>()
+//        linkedList.head?.next = Node(value: "smth")
+//    }
+    
+    // MARK: - `remove:at`
 
 }
