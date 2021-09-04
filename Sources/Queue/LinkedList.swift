@@ -61,7 +61,31 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         self._head = newNode
     }
     
-    public mutating func removeFirst(value: Value) {
-        count -= 1
+    @discardableResult
+    public mutating func remove(value: Value) -> Bool {
+        guard _tail != nil else {
+            return false
+        }
+        
+        
+        guard _tail?.value != value else {
+            _tail = _tail?.next
+            count -= 1
+            return true
+        }
+        
+        var tempNode = _tail
+        var nextNode = tempNode?.next
+        
+        while tempNode != nil {
+            if tempNode?.value == value {
+                _tail = tempNode
+                count -= 1
+                return true
+            } else {
+                tempNode = tempNode?.next
+            }
+        }
+        return false
     }
 }

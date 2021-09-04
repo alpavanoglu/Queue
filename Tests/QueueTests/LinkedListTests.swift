@@ -84,11 +84,19 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.tail, linkedList.head)
     }
     
-//    func testAsd() {
-//        let linkedList = LinkedList<String>()
-//        linkedList.head?.next = Node(value: "smth")
-//    }
+    // MARK: - `remove:value`
     
-    // MARK: - `remove:at`
+    func testRemoveValueReturnsTrueForValueThatExists() {
+        var linkedList: LinkedList = [19, 44, 23, 1]
+        XCTAssert(linkedList.remove(value: 44))
+        XCTAssertEqual(linkedList.count, 3)
+    }
+    
+    func testRemoveValueReturnsTrueAndTailIsNextValueWhenRemoveTheFirstElement() {
+        var linkedList: LinkedList = [9.7, 10.1]
+        XCTAssert(linkedList.remove(value: 9.7))
+        XCTAssertEqual(linkedList.tail, 10.1)
+        XCTAssertEqual(linkedList.head, 10.1)
+    }
 
 }
