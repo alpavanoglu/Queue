@@ -1,30 +1,19 @@
 public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     public typealias ArrayLiteralElement = Value
     
-    private var _head: Node<Value>?
-    public var head: Node<Value>? {
-        mutating get {
-            if !isKnownUniquelyReferenced(&_head) {
-                _head = _head?.copy() as? Node<Value>
-            }
-            return _head
-        } set {
-            _head = newValue
+    private var _head: Node<Value>? {
+        didSet {
+            head = _head?.value
+        }
+    }
+    private var _tail: Node<Value>? {
+        didSet {
+            tail = _tail?.value
         }
     }
     
-    private var _tail: Node<Value>?
-    public var tail: Node<Value>? {
-        mutating get {
-            if !isKnownUniquelyReferenced(&_tail) {
-                _tail = _tail?.copy() as? Node<Value>
-            }
-            return _tail
-        } set {
-            _tail = newValue
-        }
-    }
-    
+    private(set) var head: Value?
+    private(set) var tail: Value?
     
     public init () {}
     
@@ -35,14 +24,16 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         }
         
         var node = Node(first)
-        tail = node
+        _tail = node
+        tail = _tail?.value
         for value in elements[1..<elements.endIndex] {
             let next = Node(value)
             
             node.next = next
             node = next
         }
-        head = node
+        _head = node
+        head = _head?.value
     }
     
     public var isEmpty: Bool {
@@ -53,7 +44,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         let newNode = Node(value)
         guard let _head = _head else {
             _head = newNode
-            tail = newNode
+            _tail = newNode
             return
         }
         

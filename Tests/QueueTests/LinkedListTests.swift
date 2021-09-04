@@ -5,9 +5,9 @@ final class LinkedListTests: XCTestCase {
     
     // MARK: - `init:arrayLiteral`
     func testInitArrayLiteralWithMultipleElementsConstructsLinkedList() {
-        var linkedList: LinkedList = [1, 3, 4, 5]
-        XCTAssertEqual(linkedList.tail!.value, 1)
-        XCTAssertEqual(linkedList.head!.value, 5)
+        let linkedList: LinkedList = [1, 3, 4, 5]
+        XCTAssertEqual(linkedList.tail, 1)
+        XCTAssertEqual(linkedList.head, 5)
     }
     
     // MARK: - `isEmpty`
@@ -28,7 +28,7 @@ final class LinkedListTests: XCTestCase {
         
         linkedList.append("next")
         
-        XCTAssertEqual(linkedList.head?.value, "next")
+        XCTAssertEqual(linkedList.head, "next")
     }
 
     func testAppendUpdatesHeadReference() {
@@ -47,8 +47,8 @@ final class LinkedListTests: XCTestCase {
         linkedList.append("mid")
         linkedList.append("head")
 
-        XCTAssertEqual(linkedList.tail?.value, "tail")
-        XCTAssertEqual(linkedList.head?.value, "head")
+        XCTAssertEqual(linkedList.tail, "tail")
+        XCTAssertEqual(linkedList.head, "head")
     }
     
     func testTailAndHeadAreTheSameWhenOnlyOneNode() {
