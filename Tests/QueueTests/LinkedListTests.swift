@@ -4,6 +4,7 @@ import XCTest
 final class LinkedListTests: XCTestCase {
     
     // MARK: - `init:arrayLiteral`
+    
     func testInitArrayLiteralWithMultipleElementsConstructsLinkedList() {
         let linkedList: LinkedList = [1, 3, 4, 5]
         XCTAssertEqual(linkedList.tail, 1)
@@ -11,6 +12,7 @@ final class LinkedListTests: XCTestCase {
     }
     
     // MARK: - `isEmpty`
+    
     func testIsEmptyReturnsTrueWhenHeadIsNil() {
         let linkedList = LinkedList<String>()
         XCTAssert(linkedList.isEmpty)
@@ -22,7 +24,22 @@ final class LinkedListTests: XCTestCase {
         XCTAssertFalse(linkedList.isEmpty)
     }
     
+    // MARK: - `count`
+    
+    func testCountIsIncrementedAfterAppend() {
+        var linkedList = LinkedList<Int>()
+        XCTAssertEqual(linkedList.count, 0)
+        linkedList.append(3)
+        XCTAssertEqual(linkedList.count, 1)
+    }
+    
+    func testCountIsEqualToItemCountAfterInitWithArray() {
+        let linkedList: LinkedList = [2, 17, 3, 99]
+        XCTAssertEqual(linkedList.count, 4)
+    }
+    
     // MARK: - `append:value`
+    
     func testAppendUpdatesHeadElement() {
         var linkedList = LinkedList<String>()
         
@@ -56,6 +73,14 @@ final class LinkedListTests: XCTestCase {
         
         linkedList.append("one")
         
+        XCTAssertEqual(linkedList.tail, linkedList.head)
+    }
+    
+    func testAppendAddsDuplicateValues() {
+        var linkedList = LinkedList<String>()
+        linkedList.append("one")
+        linkedList.append("two")
+        linkedList.append("one")
         XCTAssertEqual(linkedList.tail, linkedList.head)
     }
     
