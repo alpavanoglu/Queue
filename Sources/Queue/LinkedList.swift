@@ -47,6 +47,18 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         _head = node
         head = _head?.value
     }
+    
+    public func peek(for value: Value) -> Bool {
+        var tempNode = _tail
+        while tempNode != nil {
+            if tempNode?.value == value {
+                return true
+            }
+            tempNode = tempNode?.next
+        }
+        
+        return false
+    }
         
     public mutating func append(_ value: Value) {
         count += 1
