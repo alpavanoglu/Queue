@@ -82,7 +82,9 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             if nextNode?.value == value {
                 count  -= 1
                 
-                guard nextNode?.next != nil else {
+                // Check if `nextNode` is `_head`.
+                guard nextNode != _head else {
+                    // Update `_head` and nullify `nextNode`
                     _head = tempNode
                     nextNode = nil
                     return true
