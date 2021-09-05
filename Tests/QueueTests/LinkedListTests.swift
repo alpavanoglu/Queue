@@ -89,14 +89,41 @@ final class LinkedListTests: XCTestCase {
     func testRemoveValueReturnsTrueForValueThatExists() {
         var linkedList: LinkedList = [19, 44, 23, 1]
         XCTAssert(linkedList.remove(value: 44))
-        XCTAssertEqual(linkedList.count, 3)
+    }
+    
+    func testRemoveValueReturnsFalseForValueThatDoesNotExist() {
+        var linkedList: LinkedList = [19, 44, 23, 1]
+        XCTAssertFalse(linkedList.remove(value: 9999))
     }
     
     func testRemoveValueReturnsTrueAndTailIsNextValueWhenRemoveTheFirstElement() {
         var linkedList: LinkedList = [9.7, 10.1]
         XCTAssert(linkedList.remove(value: 9.7))
         XCTAssertEqual(linkedList.tail, 10.1)
+    }
+    
+    func testHeadDoesNotChangeWhenRemoveIsInvokedOnAListWithMultipleElements() {
+        var linkedList: LinkedList = [9.7, 10.1]
+        linkedList.remove(value: 9.7)
         XCTAssertEqual(linkedList.head, 10.1)
+    }
+    
+    func testRemoveMiddleElementRemovesTheElementInTheMiddle() {
+        var linkedList: LinkedList = ["a", "b", "c"]
+        let didRemove = linkedList.remove(value: "b")
+        XCTAssert(didRemove)
+        XCTAssertEqual(linkedList.tail, "a")
+        XCTAssertEqual(linkedList.head, "c")
+        XCTAssertEqual(linkedList.count, 2)
+    }
+    
+    func testRemoveLastElementUpdatesHeadToBePreviousValue() {
+        var linkedList: LinkedList = ["a", "b", "c"]
+        let didRemove = linkedList.remove(value: "c")
+        XCTAssert(didRemove)
+        XCTAssertEqual(linkedList.tail, "a")
+        XCTAssertEqual(linkedList.head, "b")
+        XCTAssertEqual(linkedList.count, 2)
     }
 
 }

@@ -9,6 +9,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             head = _head?.value
         }
     }
+    
     private var _tail: Node<Value>? {
         didSet {
             tail = _tail?.value
@@ -67,8 +68,8 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             return false
         }
         
-        
-        guard _tail?.value != value else {
+        // Check if the tail has a match.
+        guard tail != value else {
             _tail = _tail?.next
             count -= 1
             return true
@@ -77,13 +78,22 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         var tempNode = _tail
         var nextNode = tempNode?.next
         
-        while tempNode != nil {
-            if tempNode?.value == value {
-                _tail = tempNode
-                count -= 1
+        while nextNode != nil {
+            if nextNode?.value == value {
+                count  -= 1
+                
+                guard nextNode?.next != nil else {
+                    _head = tempNode
+                    nextNode = nil
+                    return true
+                }
+                
+                tempNode?.next = nextNode?.next
+                nextNode = nil
                 return true
             } else {
-                tempNode = tempNode?.next
+                tempNode = nextNode
+                nextNode = nextNode?.next
             }
         }
         return false
