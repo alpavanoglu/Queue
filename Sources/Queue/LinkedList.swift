@@ -4,13 +4,13 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     private(set) var head: Value?
     private(set) var tail: Value?
 
-    private var _head: Node<Value>? {
+    var _head: Node<Value>? {
         didSet {
             head = _head?.value
         }
     }
     
-    private var _tail: Node<Value>? {
+    var _tail: Node<Value>? {
         didSet {
             tail = _tail?.value
         }
@@ -70,8 +70,15 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             return
         }
         
-        _head.next = newNode
-        self._head = newNode
+        if isKnownUniquelyReferenced(&_tail) {
+            _head.next = newNode
+            self._head = newNode
+        } else {
+            // FIXME: Force unwrap
+            _tail = _tail!.copy() as? Node<Value>
+            append(value)
+        }
+        
     }
     
     @discardableResult
@@ -112,4 +119,28 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         }
         return false
     }
+    
+//    public subscript(_ index: UInt) -> Value? {
+//        get {
+//            return findNode(at: index)?.value
+//        } set {
+//            guard let newValue = newValue else {
+//                return
+//            }
+//            let node = findNode(at: index)
+//            node?.value = newValue
+//        }
+//    }
+//
+//    private func findNode(at index: UInt) -> Node<Value>? {
+//        var temp = _tail
+//        for _ in 0..<index {
+//            guard temp != nil else {
+//                return nil
+//            }
+//
+//            temp = temp?.next
+//        }
+//        return temp
+//    }
 }

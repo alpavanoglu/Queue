@@ -101,6 +101,26 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.tail, linkedList.head)
     }
     
+    func testAppendGeneratesAFullCopyWhenNotUniquelyReferenced() {
+        let linkedList: LinkedList = ["one", "two"]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.append("three")
+        
+        XCTAssertEqual(linkedList.head, "two")
+        XCTAssertEqual(linkedListCopy.head, "three")
+    }
+    
+    func testRemoveLeavesTheCopyListConnected() {
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 3)
+        
+        XCTAssertEqual(linkedList.count, 5)
+        XCTAssertEqual(linkedListCopy.count, 4)
+    }
+    
     // MARK: - `remove:value`
     
     func testRemoveValueReturnsTrueForValueThatExists() {
@@ -142,5 +162,27 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.head, "b")
         XCTAssertEqual(linkedList.count, 2)
     }
+    
+    // MARK: - CoW
+    
+//    func testCopyOnWriteOnAppend() {
+//        let linkedList: LinkedList = ["a", "b", "c"]
+//        var linkedListCopy = linkedList
+//
+//        linkedListCopy.append("d")
+//
+//        XCTAssertEqual(linkedList.head, "c")
+//        XCTAssertEqual(linkedListCopy.head, "d")
+//    }
+//
+//    func testCopyOnWriteOnSubscript() {
+//        let linkedList: LinkedList = ["a", "b", "c"]
+//        var linkedListCopy = linkedList
+//
+//        linkedListCopy[2] = "d"
+//
+//        XCTAssertEqual(linkedList.head, "c")
+//        XCTAssertEqual(linkedListCopy.head, "d")
+//    }
 
 }
