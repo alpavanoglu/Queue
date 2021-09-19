@@ -36,6 +36,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         
         count += 1
         
+        // O(n)
         for value in elements[1..<elements.endIndex] {
             let next = Node(value)
             
@@ -50,6 +51,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     
     public func peek(for value: Value) -> Bool {
         var tempNode = _tail
+        // O(n)
         while tempNode != nil {
             if tempNode?.value == value {
                 return true
@@ -61,18 +63,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     }
         
     public mutating func append(_ value: Value) {
-        // Create a copy of the list if `_tail` is referenced more than once.
-        if !isKnownUniquelyReferenced(&_tail) {
-            // O(n)
-            _tail = _tail?.copy() as? Node<Value>
-
-            var temp = _tail
-            // O(n)
-            while temp?.next != nil {
-                temp = temp?.next
-            }
-            _head = temp
-        }
+        copyListWhenNotUniquelyReferenced()
         
         let newNode = Node(value)
         guard let _head = _head else {
@@ -94,18 +85,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             return false
         }
         
-        // Create a copy of the list if `_tail` is referenced more than once.
-        // O(n)
-        if !isKnownUniquelyReferenced(&_tail) {
-            _tail = _tail?.copy() as? Node<Value>
-            
-            var temp = _tail
-            // O(n)
-            while temp?.next != nil {
-                temp = temp?.next
-            }
-            _head = temp
-        }
+        copyListWhenNotUniquelyReferenced()
         
         // Check if the tail has a match.
         guard tail != value else {
@@ -138,5 +118,20 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
             }
         }
         return false
+    }
+    
+    private mutating func copyListWhenNotUniquelyReferenced() {
+        // Create a copy of the list if `_tail` is referenced more than once.
+        // O(n)
+        if !isKnownUniquelyReferenced(&_tail) {
+            _tail = _tail?.copy() as? Node<Value>
+            
+            var temp = _tail
+            // O(n)
+            while temp?.next != nil {
+                temp = temp?.next
+            }
+            _head = temp
+        }
     }
 }

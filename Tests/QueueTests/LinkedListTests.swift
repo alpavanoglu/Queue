@@ -113,7 +113,7 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedListCopy._tail?.next?.value, "two")
         XCTAssertEqual(linkedListCopy._tail?.next?.next?.value, "three")
         XCTAssertEqual(linkedListCopy._head?.value, "three")
-        XCTAssertEqual(linkedListCopy._head?.next, nil)
+        XCTAssertNil(linkedListCopy._head?.next)
     }
     
     func testAppendOnCopyLeavesOriginalListUnchanged() {
@@ -124,7 +124,7 @@ final class LinkedListTests: XCTestCase {
         
         XCTAssertEqual(linkedList._tail?.value, "one")
         XCTAssertEqual(linkedList._tail?.next?.value, "two")
-        XCTAssertEqual(linkedList._tail?.next?.next, nil)
+        XCTAssertNil(linkedList._tail?.next?.next)
         XCTAssertEqual(linkedList._head?.value, "two")
     }
     
@@ -136,6 +136,18 @@ final class LinkedListTests: XCTestCase {
         
         XCTAssertFalse(linkedList._tail === linkedListCopy._tail)
         XCTAssertFalse(linkedList._head === linkedListCopy._head)
+    }
+    
+    func testAppendOnEmptyCopyOnlyAppendsToCopy() {
+        let linkedList: LinkedList<String> = []
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.append("Gollum")
+        
+        XCTAssertEqual(linkedListCopy._tail?.value, "Gollum")
+        XCTAssertEqual(linkedListCopy._head?.value, "Gollum")
+        XCTAssertNil(linkedList._head)
+        XCTAssertNil(linkedList._tail)
     }
     
     // MARK: - `remove:value`
