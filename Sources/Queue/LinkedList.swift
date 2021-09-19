@@ -120,6 +120,29 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         return false
     }
     
+    @discardableResult
+    public mutating func removeFirst() -> Bool {
+        guard count != 0 else {
+            return false
+        }
+        
+        count -= 1
+        
+        guard count > 1 else {
+            copyListWhenNotUniquelyReferenced()
+            _tail = nil
+            _head = nil
+            return true
+        }
+        
+        copyListWhenNotUniquelyReferenced()
+        var temp = _tail
+        _tail = temp?.next
+        temp = nil
+        
+        return true
+    }
+    
     private mutating func copyListWhenNotUniquelyReferenced() {
         // Create a copy of the list if `_tail` is referenced more than once.
         // O(n)
