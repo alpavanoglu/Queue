@@ -101,24 +101,41 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.tail, linkedList.head)
     }
     
-    func testAppendGeneratesAFullCopyWhenNotUniquelyReferenced() {
+    // MARK: - `append:value` CoW
+    
+    func testAppendOnCopyOnlyUpdatesCopy() {
         let linkedList: LinkedList = ["one", "two"]
         var linkedListCopy = linkedList
         
         linkedListCopy.append("three")
         
-        XCTAssertEqual(linkedList.head, "two")
-        XCTAssertEqual(linkedListCopy.head, "three")
+        XCTAssertEqual(linkedListCopy._tail?.value, "one")
+        XCTAssertEqual(linkedListCopy._tail?.next?.value, "two")
+        XCTAssertEqual(linkedListCopy._tail?.next?.next?.value, "three")
+        XCTAssertEqual(linkedListCopy._head?.value, "three")
+        XCTAssertEqual(linkedListCopy._head?.next, nil)
     }
     
-    func testRemoveLeavesTheCopyListConnected() {
-        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+    func testAppendOnCopyLeavesOriginalListUnchanged() {
+        let linkedList: LinkedList = ["one", "two"]
         var linkedListCopy = linkedList
         
-        linkedListCopy.remove(value: 3)
+        linkedListCopy.append("three")
         
-        XCTAssertEqual(linkedList.count, 5)
-        XCTAssertEqual(linkedListCopy.count, 4)
+        XCTAssertEqual(linkedList._tail?.value, "one")
+        XCTAssertEqual(linkedList._tail?.next?.value, "two")
+        XCTAssertEqual(linkedList._tail?.next?.next, nil)
+        XCTAssertEqual(linkedList._head?.value, "two")
+    }
+    
+    func testAppendOnCopyGeneratesANewListWithNewTailHeadReference() {
+        let linkedList: LinkedList = ["one", "two"]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.append("three")
+        
+        XCTAssertFalse(linkedList._tail === linkedListCopy._tail)
+        XCTAssertFalse(linkedList._head === linkedListCopy._head)
     }
     
     // MARK: - `remove:value`
@@ -163,26 +180,60 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.count, 2)
     }
     
-    // MARK: - CoW
+    // MARK: - `remove:value` CoW
     
-//    func testCopyOnWriteOnAppend() {
-//        let linkedList: LinkedList = ["a", "b", "c"]
-//        var linkedListCopy = linkedList
-//
-//        linkedListCopy.append("d")
-//
-//        XCTAssertEqual(linkedList.head, "c")
-//        XCTAssertEqual(linkedListCopy.head, "d")
-//    }
-//
-//    func testCopyOnWriteOnSubscript() {
-//        let linkedList: LinkedList = ["a", "b", "c"]
-//        var linkedListCopy = linkedList
-//
-//        linkedListCopy[2] = "d"
-//
-//        XCTAssertEqual(linkedList.head, "c")
-//        XCTAssertEqual(linkedListCopy.head, "d")
-//    }
+    func testRemoveSecondElementOfCopyLeavesTheCopyListConnected() {
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 2)
+        
+        XCTAssertEqual(linkedListCopy._tail?.next?.value, 3)
+        XCTAssertEqual(linkedListCopy.count, 4)
+    }
+    
+    
+    func testRemoveSecondElementOfCopyLeavesTheOriginalListConnected() {
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 2)
+        
+        XCTAssertEqual(linkedList._tail?.next?.value, 2)
+        XCTAssertEqual(linkedList.count, 5)
+    }
+    
+    func testRemoveFirstElementOfCopyUpdatedCopyTail() {
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 1)
+        
+        XCTAssertEqual(linkedListCopy._tail?.value, 2)
+        XCTAssertEqual(linkedListCopy._tail?.next?.value, 3)
+        XCTAssertEqual(linkedListCopy.count, 4)
+    }
+    
+    
+    func testRemoveFirstElementOfCopyDoesNotUpdateTail() {
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 1)
+        
+        XCTAssertEqual(linkedList._tail?.next?.value, 2)
+        XCTAssertEqual(linkedList.count, 5)
+    }
+    
+    func testRemoveMiddleElementOnCopyGeneratesANewListWithNewTailHeadReference() {
 
+        let linkedList: LinkedList = [1, 2, 3, 4, 5]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.remove(value: 1)
+        
+        XCTAssertFalse(linkedList._tail === linkedListCopy._tail)
+        XCTAssertFalse(linkedList._head === linkedListCopy._head)
+    }
+    
 }

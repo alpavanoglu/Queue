@@ -4,13 +4,13 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     private(set) var head: Value?
     private(set) var tail: Value?
 
-    var _head: Node<Value>? {
+    private(set) internal var _head: Node<Value>? {
         didSet {
             head = _head?.value
         }
     }
     
-    var _tail: Node<Value>? {
+    private(set) internal var _tail: Node<Value>? {
         didSet {
             tail = _tail?.value
         }
@@ -61,30 +61,50 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     }
         
     public mutating func append(_ value: Value) {
-        count += 1
+        // Create a copy of the list if `_tail` is referenced more than once.
+        if !isKnownUniquelyReferenced(&_tail) {
+            // O(n)
+            _tail = _tail?.copy() as? Node<Value>
+
+            var temp = _tail
+            // O(n)
+            while temp?.next != nil {
+                temp = temp?.next
+            }
+            _head = temp
+        }
         
         let newNode = Node(value)
         guard let _head = _head else {
             _head = newNode
             _tail = newNode
+            count += 1
             return
         }
         
-        if isKnownUniquelyReferenced(&_tail) {
-            _head.next = newNode
-            self._head = newNode
-        } else {
-            // FIXME: Force unwrap
-            _tail = _tail!.copy() as? Node<Value>
-            append(value)
-        }
+        _head.next = newNode
+        self._head = newNode
         
+        count += 1
     }
     
     @discardableResult
     public mutating func remove(value: Value) -> Bool {
         guard _tail != nil else {
             return false
+        }
+        
+        // Create a copy of the list if `_tail` is referenced more than once.
+        // O(n)
+        if !isKnownUniquelyReferenced(&_tail) {
+            _tail = _tail?.copy() as? Node<Value>
+            
+            var temp = _tail
+            // O(n)
+            while temp?.next != nil {
+                temp = temp?.next
+            }
+            _head = temp
         }
         
         // Check if the tail has a match.
@@ -119,28 +139,4 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         }
         return false
     }
-    
-//    public subscript(_ index: UInt) -> Value? {
-//        get {
-//            return findNode(at: index)?.value
-//        } set {
-//            guard let newValue = newValue else {
-//                return
-//            }
-//            let node = findNode(at: index)
-//            node?.value = newValue
-//        }
-//    }
-//
-//    private func findNode(at index: UInt) -> Node<Value>? {
-//        var temp = _tail
-//        for _ in 0..<index {
-//            guard temp != nil else {
-//                return nil
-//            }
-//
-//            temp = temp?.next
-//        }
-//        return temp
-//    }
 }
