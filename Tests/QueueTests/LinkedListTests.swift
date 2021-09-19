@@ -253,8 +253,8 @@ final class LinkedListTests: XCTestCase {
     func testRemoveFirstUpdatesTail() {
         var linkedList: LinkedList = [1, 2, 3, 4, 5]
         
-        let didRemove = linkedList.removeFirst()
-        XCTAssertTrue(didRemove)
+        let removedValue = linkedList.removeFirst()
+        XCTAssertEqual(removedValue, 1)
         XCTAssertEqual(linkedList._tail?.value, 2)
         XCTAssertEqual(linkedList.count, 4)
     }
@@ -262,8 +262,8 @@ final class LinkedListTests: XCTestCase {
     func testRemoveFirstWhenSingleElementNullifiesTailAndHead() {
         var linkedList: LinkedList = [1]
         
-        let didRemove = linkedList.removeFirst()
-        XCTAssertTrue(didRemove)
+        let removedValue = linkedList.removeFirst()
+        XCTAssertEqual(removedValue, 1)
         XCTAssertNil(linkedList._head)
         XCTAssertNil(linkedList._tail)
     }
@@ -271,8 +271,8 @@ final class LinkedListTests: XCTestCase {
     func testRemoveFirstReturnsFalseWhenListIsEmpty() {
         var linkedList: LinkedList<Int> = []
         
-        let didRemove = linkedList.removeFirst()
-        XCTAssertFalse(didRemove)
+        let removedValue = linkedList.removeFirst()
+        XCTAssertNil(removedValue)
     }
     
     // MARK: - `removeFirst` CoW
@@ -281,8 +281,8 @@ final class LinkedListTests: XCTestCase {
         let linkedList: LinkedList = [3, 5]
         var linkedListCopy = linkedList
         
-        let didRemove = linkedListCopy.removeFirst()
-        XCTAssertTrue(didRemove)
+        let removedValue = linkedListCopy.removeFirst()
+        XCTAssertEqual(removedValue, 3)
         XCTAssertNotEqual(linkedList._tail, linkedListCopy._tail)
         XCTAssertNotEqual(linkedList._head, linkedListCopy._head)
     }

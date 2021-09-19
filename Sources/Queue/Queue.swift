@@ -13,7 +13,7 @@ public struct Queue<Value: Equatable> {
         linkedList.append(value)
     }
     
-//    public func dequeue() -> Value {
-//        
-//    }
+    public mutating func dequeue() -> Value? {
+        linkedList.removeFirst()
+    }
 }

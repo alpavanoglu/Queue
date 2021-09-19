@@ -121,18 +121,19 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
     }
     
     @discardableResult
-    public mutating func removeFirst() -> Bool {
+    public mutating func removeFirst() -> Value? {
         guard count != 0 else {
-            return false
+            return nil
         }
         
         count -= 1
+        let value = _tail?.value
         
         guard count > 1 else {
             copyListWhenNotUniquelyReferenced()
             _tail = nil
             _head = nil
-            return true
+            return value
         }
         
         copyListWhenNotUniquelyReferenced()
@@ -140,7 +141,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         _tail = temp?.next
         temp = nil
         
-        return true
+        return value
     }
     
     private mutating func copyListWhenNotUniquelyReferenced() {
