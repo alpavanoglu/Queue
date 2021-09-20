@@ -1,4 +1,6 @@
-# Swift Queue
+# Swift Queue 
+[![Swift](https://img.shields.io/badge/-Swift-fff?&logo=Swift)](https://swift.org/) [![SwiftPM](https://img.shields.io/badge/SwiftPM-Compatible-orange)](https://swift.org/package-manager/) [![Platforms](https://img.shields.io/badge/Platforms-macOS%20iOS%20watchOS%20tvOS-ec83b8)](https://developer.apple.com/discover/) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+
 
 A constant (O(1)) Queue implementation in Swift that favors Value Semantics. 
 
