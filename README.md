@@ -1,5 +1,5 @@
 # Swift Queue 
-[![Swift](https://img.shields.io/badge/-Swift-fff?&logo=Swift)](https://swift.org/) [![SwiftPM](https://img.shields.io/badge/SwiftPM-Compatible-orange)](https://swift.org/package-manager/) [![Platforms](https://img.shields.io/badge/Platforms-macOS%20iOS%20watchOS%20tvOS-ec83b8)](https://developer.apple.com/discover/) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![Swift](https://img.shields.io/badge/Swift-100%25-orange?logo=swift&style=flat)](https://swift.org/) [![SwiftPM](https://img.shields.io/badge/SwiftPM-Compatible-red)](https://swift.org/package-manager/) [![Platforms](https://img.shields.io/badge/Platforms-macOS%20iOS%20watchOS%20tvOS-ec83b8)](https://developer.apple.com/discover/) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 
 A Queue implementation in Swift with constant (O(1)) time `enqueue` and `dequeue` operations that favors Value Semantics. 
