@@ -65,15 +65,6 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.head, "next")
     }
 
-    func testAppendUpdatesHeadReference() {
-        var linkedList = LinkedList<String>()
-        let head = linkedList.head
-        
-        linkedList.append("next")
-        
-        XCTAssertNotEqual(head, linkedList.head)
-    }
-    
     func testTailIsFirstAppendedNodeAfter3Appends() {
         var linkedList = LinkedList<String>()
 
@@ -143,6 +134,96 @@ final class LinkedListTests: XCTestCase {
         var linkedListCopy = linkedList
         
         linkedListCopy.append("Gollum")
+        
+        XCTAssertEqual(linkedListCopy._tail?.value, "Gollum")
+        XCTAssertEqual(linkedListCopy._head?.value, "Gollum")
+        XCTAssertNil(linkedList._head)
+        XCTAssertNil(linkedList._tail)
+    }
+    
+    // MARK: - `prepend:value`
+    
+    func testPrependUpdatesTailElement() {
+        var linkedList = LinkedList<String>()
+        
+        linkedList.append("first")
+        XCTAssertEqual(linkedList.tail, "first")
+        
+        linkedList.prepend("next")
+        
+        XCTAssertEqual(linkedList.head, "first")
+        XCTAssertEqual(linkedList.tail, "next")
+    }
+
+    func testTailIsLastPrependedNodeAfter3Prepends() {
+        var linkedList = LinkedList<String>()
+
+        linkedList.prepend("head")
+        linkedList.prepend("mid")
+        linkedList.prepend("tail")
+
+        XCTAssertEqual(linkedList.tail, "tail")
+        XCTAssertEqual(linkedList.head, "head")
+    }
+
+    func testTailAndHeadAreTheSameAfterPrependWhenOnlyOneNode() {
+        var linkedList = LinkedList<String>()
+
+        linkedList.prepend("one")
+
+        XCTAssertEqual(linkedList.tail, linkedList.head)
+    }
+
+    func testPrependAddsDuplicateValues() {
+        var linkedList = LinkedList<String>()
+        linkedList.append("one")
+        linkedList.append("two")
+        linkedList.append("one")
+        XCTAssertEqual(linkedList.tail, linkedList.head)
+    }
+    
+    // MARK: - `prepend:value` CoW
+    
+    func testPrependOnCopyOnlyUpdatesCopy() {
+        let linkedList: LinkedList = ["one", "two"]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.prepend("zero")
+        
+        XCTAssertEqual(linkedListCopy._tail?.value, "zero")
+        XCTAssertEqual(linkedListCopy._tail?.next?.value, "one")
+        XCTAssertEqual(linkedListCopy._tail?.next?.next?.value, "two")
+        XCTAssertEqual(linkedListCopy._head?.value, "two")
+        XCTAssertNil(linkedListCopy._head?.next)
+    }
+    
+    func testPrependOnCopyLeavesOriginalListUnchanged() {
+        let linkedList: LinkedList = ["one", "two"]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.prepend("zero")
+        
+        XCTAssertEqual(linkedList._tail?.value, "one")
+        XCTAssertEqual(linkedList._tail?.next?.value, "two")
+        XCTAssertNil(linkedList._tail?.next?.next)
+        XCTAssertEqual(linkedList._head?.value, "two")
+    }
+    
+    func testPrependOnCopyGeneratesANewListWithNewTailHeadReference() {
+        let linkedList: LinkedList = ["one", "two"]
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.prepend("zero")
+        
+        XCTAssertFalse(linkedList._tail === linkedListCopy._tail)
+        XCTAssertFalse(linkedList._head === linkedListCopy._head)
+    }
+    
+    func testPrependOnEmptyCopyOnlyAppendsToCopy() {
+        let linkedList: LinkedList<String> = []
+        var linkedListCopy = linkedList
+        
+        linkedListCopy.prepend("Gollum")
         
         XCTAssertEqual(linkedListCopy._tail?.value, "Gollum")
         XCTAssertEqual(linkedListCopy._head?.value, "Gollum")
