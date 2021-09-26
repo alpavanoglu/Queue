@@ -14,7 +14,6 @@ internal class Node<Value: Equatable>: Equatable, NSCopying {
     }
     
     internal func copy(with zone: NSZone? = nil) -> Any {
-        print("copy")
         let node = Node(value)
         if let nextCopy = next?.copy(with: zone) as? Node<Value> {
             node.next = nextCopy

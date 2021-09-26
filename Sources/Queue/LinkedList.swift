@@ -79,6 +79,24 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         count += 1
     }
     
+    public mutating func prepend(_ value: Value) {
+        copyListWhenNotUniquelyReferenced()
+        
+        let newNode = Node(value)
+        guard let _tail = _tail else {
+            _head = newNode
+            _tail = newNode
+            count += 1
+            return
+        }
+        
+        newNode.next = _tail
+        self._tail = newNode
+        
+        count += 1
+        
+    }
+    
     @discardableResult
     public mutating func remove(value: Value) -> Bool {
         guard _tail != nil else {
