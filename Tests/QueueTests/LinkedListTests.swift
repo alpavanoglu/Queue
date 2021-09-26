@@ -38,21 +38,21 @@ final class LinkedListTests: XCTestCase {
         XCTAssertEqual(linkedList.count, 4)
     }
     
-    // MARK: - `peek:for`
+    // MARK: - `peek`
     
     func testPeekReturnsTrueForValueExistsInList() {
         let linkedList: LinkedList = [2, 17, 3, 99]
-        XCTAssert(linkedList.peek(for: 99))
+        XCTAssert(linkedList.peek(99))
     }
     
     func testPeekReturnsFalseForValueDoesNotExistInList() {
         let linkedList: LinkedList = [2, 17, 3, 99]
-        XCTAssertFalse(linkedList.peek(for: 34))
+        XCTAssertFalse(linkedList.peek(34))
     }
     
     func testPeekReturnsFalseForEmptyList() {
         let linkedList: LinkedList<String> = []
-        XCTAssertFalse(linkedList.peek(for: "asd"))
+        XCTAssertFalse(linkedList.peek("asd"))
     }
     
     // MARK: - `append:value`

@@ -49,7 +49,7 @@ public struct LinkedList<Value: Equatable>: ExpressibleByArrayLiteral {
         head = _head?.value
     }
     
-    public func peek(for value: Value) -> Bool {
+    public func peek(_ value: Value) -> Bool {
         var tempNode = _tail
         // O(n)
         while tempNode != nil {

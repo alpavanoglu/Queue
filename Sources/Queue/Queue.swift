@@ -35,4 +35,8 @@ public struct Queue<Value: Equatable>: ExpressibleByArrayLiteral {
     public mutating func dequeue() -> Value? {
         linkedList.removeFirst()
     }
+    
+    public func peek(_ value: Value) -> Bool {
+        linkedList.peek(value)
+    }
 }

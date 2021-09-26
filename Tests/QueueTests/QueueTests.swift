@@ -36,9 +36,26 @@ final class QueueTests: XCTestCase {
     
     func testDequeueDecrementsTheCount() {
         var queue: Queue = ["and", "it", "makes", "me", "wonder"]
+        queue.dequeue()
+        XCTAssertEqual(queue.count, 4)
+    }
+    
+    func testDequeueRemovesTheRearValue() {
+        var queue: Queue = ["and", "it", "makes", "me", "wonder"]
         let dequeuedValue = queue.dequeue()
         
         XCTAssertEqual(dequeuedValue, "and")
-        XCTAssertEqual(queue.count, 4)
+    }
+    
+    // MARK: - `peek`
+    
+    func testPeekReturnsTrueForElementThatExists() {
+        let queue: Queue = ["and", "it", "makes", "me", "wonder"]
+        XCTAssertTrue(queue.peek("it"))
+    }
+    
+    func testPeekReturnsFalseForElementThatDoesNotExist() {
+        let queue: Queue = ["and", "it", "makes", "me", "wonder"]
+        XCTAssertFalse(queue.peek("stairway"))
     }
 }
